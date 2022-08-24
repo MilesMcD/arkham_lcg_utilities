@@ -1,31 +1,33 @@
 import sqlite3
 
+from datetime import datetime
+from sqlmodel import Field, create_engine, SQLModel
+from typing import Optional
 
-def initialize():
+sqlite_file_name = "arkham-utilities.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+engine = create_engine(sqlite_url, echo=True)
+
+
+# todo create index
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
     con = sqlite3.connect('arkham-utilities.db')
-    create_decklist_table(con.cursor())
 
 
-def create_decklist_table(c):
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS decklists (
-            [id] INTEGER PRIMARY KEY, 
-            [create_date] DATETIME NOT NULL,
-            [update_date] DATETIME NOT NULL,
-            [investigator_id] INTEGER NOT NULL,
-            [version] TEXT NOT NULL,
-            [slots] TEXT NOT NULL,
-            [side_slots] TEXT NOT NULL,
-            [xp] INTEGER,
-            [xp_spent] INTEGER,
-            [exile_string] TEXT,
-            [taboo_id] INTEGER,
-            [tags] TEXT
-        )
-    ''')
-
-    c.execute('''
-        CREATE INDEX IF NOT EXISTS idx_investigator_id on decklists (investigator_id) 
-    ''')
+class Decklist(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    create_date: datetime
+    update_date: datetime
+    investigator_id: int
+    version: str
+    slots: str
+    side_slots: str
+    xp: Optional[int] = None
+    xp_spent: Optional[int] = None
+    exile_string: Optional[str] = None
+    taboo_id: Optional[int] = None
+    tags: Optional[str] = None
 
     # TODO future enhancement, create a table of decklist_id, card_id, count to store cards instead of slot csv

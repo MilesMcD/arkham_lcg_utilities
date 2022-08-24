@@ -1,8 +1,7 @@
 import datetime
+import db
 import pandas as pd
 import requests
-import db
-import json
 
 
 # Grabs decks from a given date and returns them as a dictionary
@@ -28,5 +27,5 @@ def request_decklists_by_date_range(from_date: datetime.date, to_date: datetime.
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    db.initialize()
+    db.create_db_and_tables()
     request_decklists_by_date_range(datetime.datetime(2022, 8, 1), datetime.datetime(2022, 8, 5)) #datetime.date.today())
