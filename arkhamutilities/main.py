@@ -2,11 +2,10 @@ import datetime
 
 from sqlmodel import Session, select
 
-import db
 import pandas as pd
 import requests
 
-from db import Decklist, engine
+from arkhamutilities.db import Decklist, engine
 
 
 # Grabs decks from a given date and returns them as a dictionary

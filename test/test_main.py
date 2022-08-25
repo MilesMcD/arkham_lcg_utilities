@@ -1,5 +1,5 @@
-import arkhamutilities.main
-import arkhamutilities.db
+import arkhamutilities
+from arkhamutilities import main
 import datetime
 
 
