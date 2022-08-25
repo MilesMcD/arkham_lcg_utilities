@@ -1,7 +1,8 @@
+import enum
 import sqlite3
 
 from datetime import datetime
-from sqlmodel import Field, create_engine, SQLModel
+from sqlmodel import Field, create_engine, SQLModel, Enum, Column
 from typing import Optional, List
 
 sqlite_file_name = "arkham-utilities.db"
@@ -30,3 +31,47 @@ class Decklist(SQLModel, table=True):
     tags: Optional[str] = None
 
     # TODO future enhancement, create a table of decklist_id, card_id, count to store cards instead of slot csv
+class Slots(enum.Enum):
+    hand = 1
+    hand2 = 2
+    body = 3
+    accessory = 4
+    arcane = 5
+    arcane2 = 6
+    ally = 7
+
+
+class PlayerCards(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    pack_code: str
+    type_code: str
+    faction_code: str
+    exceptional: bool
+    myriad: bool
+    name: str
+    cost: int
+    quantity: int
+    intellect: int
+    combat: int
+    agility: int
+    wild: int
+    deck_limit: int
+    slot: Slots = Field(sa_column=Column(Enum(Slots)))
+    traits: str
+    is_unique: bool
+    permanent: bool
+class IdentityCards(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    pack_code: str
+    type_code: str
+    faction_code: str
+    exceptional: bool
+    myriad: bool
+    name: str
+    cost: int
+    quantity: int
+    intellect: int
+    combat: int
+    agility: int
+    health: int
+    sanity: int
