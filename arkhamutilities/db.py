@@ -2,7 +2,7 @@ import sqlite3
 
 from datetime import datetime
 from sqlmodel import Field, create_engine, SQLModel
-from typing import Optional
+from typing import Optional, List
 
 sqlite_file_name = "arkham-utilities.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -13,7 +13,6 @@ engine = create_engine(sqlite_url, echo=True)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
-    con = sqlite3.connect('arkham-utilities.db')
 
 
 class Decklist(SQLModel, table=True):
@@ -22,8 +21,8 @@ class Decklist(SQLModel, table=True):
     update_date: datetime
     investigator_id: int
     version: str
-    slots: str
-    side_slots: str
+    slots: List[int]
+    side_slots: List[int]
     xp: Optional[int] = None
     xp_spent: Optional[int] = None
     exile_string: Optional[str] = None

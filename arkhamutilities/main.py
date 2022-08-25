@@ -1,7 +1,12 @@
 import datetime
+
+from sqlmodel import Session, select
+
 import db
 import pandas as pd
 import requests
+
+from db import Decklist, engine
 
 
 # Grabs decks from a given date and returns them as a dictionary
@@ -19,13 +24,18 @@ def request_decklists_by_date(date: datetime.date):
 
 # Makes a request to https://arkhamdb.com/api/public/decklists/by_date/ for each date in the range
 def request_decklists_by_date_range(from_date: datetime.date, to_date: datetime.date):
-    all_decklists = []
     for single_date in pd.date_range(from_date, to_date):  # TODO replace code if don't want to use pandas elsewhere
         print(single_date)
-        all_decklists.add(request_decklists_by_date(single_date))
-    return all_decklists
+        data = request_decklists_by_date(single_date)
+        decklists = [Decklist(**kwargs) for kwargs in data]
+        session.add_all(decklists)
+    session.commit()
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     db.create_db_and_tables()
-    request_decklists_by_date_range(datetime.datetime(2022, 8, 1), datetime.datetime(2022, 8, 5)) #datetime.date.today())
+    session = Session(engine)
+    # request_decklists_by_date_range(datetime.datetime(2022, 8, 15), datetime.datetime(2022, 8, 20)) #datetime.date.today())
+    with session as session:
+        decklists = select(Decklist)
+        print('saved decklists', decklists)
