@@ -12,14 +12,15 @@ engine = create_engine(sqlite_url, echo=True)
 
 # todo create index
 
+
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 
 class Decklist(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    create_date: datetime
-    update_date: datetime
+    create_date: datetime = datetime.now()
+    update_date: datetime = datetime.now()
     investigator_id: int
     version: str
     slots: List[int]
