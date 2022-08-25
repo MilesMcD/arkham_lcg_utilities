@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 import pandas as pd
 import requests
 
-from arkhamutilities.db import Decklist, engine
+from arkhamutilities.db import Decklist, engine, create_db_and_tables
 
 
 # Grabs decks from a given date and returns them as a dictionary
@@ -40,7 +40,7 @@ def validate_decklists(decklists: [Decklist]) -> [Decklist]:
 
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
-    db.create_db_and_tables()
+    create_db_and_tables()
     session = Session(engine)
     request_decklists_by_date_range(
         datetime.datetime(2022, 8, 15), datetime.datetime(2022, 8, 16)
